@@ -4,10 +4,10 @@ from sklearn.pipeline import Pipeline
 from pickle import load
 
 
-def make_inference(in_model: Pipeline, in_data: dict) -> dict[str, float]:
+def make_inference(in_model: Pipeline, in_data: dict) -> dict[str, str]:
     """Return the result of predictions for in_data using in_model."""
-    mpg = in_model.predict(pd.DataFrame(in_data, index=[0]))[0][0]
-    return {"mpg": round(mpg, 3)}
+    species = in_model.predict(pd.DataFrame(in_data, index=[0]))[0]
+    return {"species": species}
 
 
 def load_model(path: str) -> Pipeline:

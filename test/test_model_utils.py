@@ -8,23 +8,30 @@ from pickle import dumps
 
 @pytest.fixture
 def create_data() -> dict[str, int | float]:
-    return {"cylinders": 4, "displacement": 113.0, "horsepower": 95.0,
-            "weight": 2228.0, "acceleration": 14.0, "model_year": 71,
-            "origin": 3}
+    return {
+        "culmen_length_mm": 36.7,
+        "culmen_depth_mm": 19.3,
+        "flipper_length_mm": 193.0,
+        "body_mass_g": 3450.0,
+        "sex": 1,
+        "island_Biscoe": 0,
+        "island_Dream": 0,
+        "island_Torgersen": 1
+    }
 
 
 def test_make_inference(monkeypatch, create_data):
-    def mock_get_predictions(_, data: pd.DataFrame) -> list[list[float]]:
+    def mock_get_predictions(_, data: pd.DataFrame) -> list[str]:
         assert create_data == {
             key: value[0] for key, value in data.to_dict("list").items()
         }
-        return [[37.973]]
+        return ["Adelie"]
 
     in_model = Pipeline([])
     monkeypatch.setattr(Pipeline, "predict", mock_get_predictions)
 
     result = make_inference(in_model, create_data)
-    assert result == {"mpg": 37.973}
+    assert result == {"species": "Adelie"}
 
 
 @pytest.fixture()
