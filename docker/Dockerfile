@@ -4,6 +4,7 @@ RUN groupadd --gid 1000 service && \
 WORKDIR /home/service
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
+COPY ./models models
 COPY ./src .
 USER service
 ENTRYPOINT [ "uvicorn" , "main:app", "--host", "0.0.0.0", "--port", "8000"]
