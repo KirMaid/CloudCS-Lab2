@@ -59,7 +59,9 @@ async def get_access_token(credentials: Credentials):
 
 
 @app.post("/predictions")
-async def predictions(instance: Instance, credentials: Credentials) -> dict[str, str]:
+async def predictions(
+        instance: Instance, credentials: Credentials
+) -> dict[str, str]:
     token = await get_access_token(credentials)
     auth_status = await get_token_status(token)
 
