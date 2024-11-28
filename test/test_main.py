@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from keycloak.uma_permissions import AuthStatus
 from typing import Tuple, Any
 
+
 @pytest.fixture
 def init_test_client(monkeypatch) -> TestClient:
     def mock_make_inference(*args, **kwargs) -> dict[str, str]:
@@ -28,6 +29,7 @@ def init_test_client(monkeypatch) -> TestClient:
                     return AuthStatus(True, False, set())
                 else:
                     return AuthStatus(False, False, set())
+
         return FakedKeycloakOpenID
 
     monkeypatch.setenv("MODEL_PATH", "faked/model.pkl")
@@ -41,10 +43,12 @@ def init_test_client(monkeypatch) -> TestClient:
     from main import app
     return TestClient(app)
 
+
 def test_healthcheck(init_test_client) -> None:
     response = init_test_client.get("/healthcheck")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
 
 def test_token_correctness(init_test_client) -> None:
     response = init_test_client.post(
@@ -63,6 +67,7 @@ def test_token_correctness(init_test_client) -> None:
     )
     assert response.status_code == 200
     assert "species" in response.json()
+
 
 def test_token_not_correctness(init_test_client):
     response = init_test_client.post(

@@ -8,6 +8,7 @@ from keycloak.uma_permissions import AuthStatus
 from keycloak_utils import get_keycloak_data
 import requests
 
+
 class Instance(BaseModel):
     culmen_length_mm: float
     culmen_depth_mm: float
@@ -18,9 +19,11 @@ class Instance(BaseModel):
     island_Dream: int
     island_Torgersen: int
 
+
 class Credentials(BaseModel):
     client_id: str
     client_secret: str
+
 
 app = FastAPI()
 keycloak_openid, token_endpoint = get_keycloak_data()
@@ -29,9 +32,11 @@ model_path: str = os.getenv("MODEL_PATH")
 if model_path is None:
     raise ValueError("The environment variable $MODEL_PATH is empty!")
 
+
 async def get_token_status(token: str) -> AuthStatus:
     return keycloak_openid.has_uma_access(
         token, "infer_endpoint#doInfer")
+
 
 async def get_access_token(credentials: Credentials):
     data = {
@@ -51,6 +56,7 @@ async def get_access_token(credentials: Credentials):
             status_code=response.status_code,
             detail=f"Failed to obtain access token: {response.text}"
         )
+
 
 @app.post("/predictions")
 async def predictions(instance: Instance, credentials: Credentials) -> dict[str, str]:
@@ -78,8 +84,8 @@ async def predictions(instance: Instance, credentials: Credentials) -> dict[str,
     return make_inference(load_model(model_path),
                           instance.dict())
 
+
 @app.get("/healthcheck")
 def healthcheck() -> dict[str, str]:
     print(token_endpoint)
     return {"status": "ok"}
-

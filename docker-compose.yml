@@ -15,7 +15,7 @@ services:
     ports:
       - "8888:5432"
   keycloak:
-    image: ialavash:keycloak
+    image: ialavash/cloud-cs:keycloak
     build:
       context: ./keycloak/docker
       dockerfile: Dockerfile
@@ -29,7 +29,7 @@ services:
       postgres:
         condition: service_healthy
   inference:
-    image: ialavash:inference-service
+    image: ialavash/cloud-cs:inference-service
     build:
       context: .
       dockerfile: docker/Dockerfile
