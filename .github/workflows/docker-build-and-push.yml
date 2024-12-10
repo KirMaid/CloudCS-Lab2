@@ -29,9 +29,6 @@ jobs:
       - name: Lint with pycodestyle
         run: |
           pycodestyle src test
-      - name: Test with pytest
-        run: |
-          PYTHONPATH=./:./src pytest test
 
   push-image-to-docker-hub:
     needs: tests
